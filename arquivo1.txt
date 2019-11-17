@@ -1,0 +1,4 @@
+This is an example file which will be generated a hash from.
+Pineaple
+Apples
+Pizza
