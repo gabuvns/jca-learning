@@ -11,7 +11,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class Hashing {
 	//Get file content
-	public static String read_file(String file_name) throws IOException {
+	private static String read_file(String file_name) throws IOException {
 		String arquivo_lido = "";
 		
 		File file = new File(file_name);
@@ -29,7 +29,7 @@ public class Hashing {
 	}
 	
 	//Computes hash
-	public static String compute_hash(String file_name) throws NoSuchAlgorithmException, 
+	private static String compute_hash(String file_name) throws NoSuchAlgorithmException, 
     UnsupportedEncodingException {
 		try {
 			String arquivo = read_file(file_name);
@@ -49,12 +49,15 @@ public class Hashing {
 			e.printStackTrace();
 			return null;
 		}
+		catch(NoSuchAlgorithmException e) {
+			System.out.println("Algoritmo Inexistente");
+			return null;
+		}
 		
-	
-		
+
 	}
 	
-	public static void print_help() {
+	private static void print_help() {
 		System.out.println("Avaiable commands:");
 		System.out.println("--hash <file> Computes a file hash in SHA256");
 		System.out.println("--verify <file> <hash> Checks file integrity in relation to the reported hash");
@@ -99,8 +102,7 @@ public class Hashing {
 			}
 			else{
 					System.out.println("Correct usage: --verify <file> <hash>");
-			}
-				
+			}		
 				
 		}
 		
@@ -112,7 +114,6 @@ public class Hashing {
 			System.out.println("Command not found. Try --help");
 		}
 		
-
 	}
 
 }
