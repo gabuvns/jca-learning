@@ -10,6 +10,28 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Hashing {
+	
+	public static void main(String[] args) {	
+		if(args.length == 0){
+			print_help();
+		}
+		
+		else {
+			switch(args[0]) {
+			case ("--hash"):
+				hash_command(args);
+				break;
+			case ("--verify"):
+				verify_command(args);
+				break;
+			
+			default:
+				print_help();
+				break;
+			}
+		}
+	}
+	
 	//Get file content
 	private static String read_file(String file_name) throws IOException {
 		String arquivo_lido = "";
@@ -46,15 +68,12 @@ public class Hashing {
 		      return resultado_hex;
 			}
 		catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-		catch(NoSuchAlgorithmException e) {
-			System.out.println("Algoritmo Inexistente");
+			System.out.println("Arquivo nao encontrado");
+			e.printStackTrace();;
 			return null;
 		}
 		
-
+		
 	}
 	
 	private static void print_help() {
@@ -62,58 +81,51 @@ public class Hashing {
 		System.out.println("--hash <file> Computes a file hash in SHA256");
 		System.out.println("--verify <file> <hash> Checks file integrity in relation to the reported hash");
 	}
-	public static void main(String[] args) {
-		if(args.length == 0){
-			print_help();
-		}
-		//Verify which command was used
-		else if(args[0].equals("--hash")) {
-			//Verify if the command is valid
-			if(args.length == 2) {
-				try{
-					String resultado_hex = compute_hash(args[1]);
-					System.out.println("Nome do arquivo:" + args[1].toString());
-					System.out.println("Hash:" + resultado_hex.toString());
-				}
-				catch(Exception e) {
-					e.printStackTrace();
-				}
+	
+	private static void hash_command(String[] args) {
+		if(args.length == 2) {
+			try{
+				String resultado_hex = compute_hash(args[1]);
+				System.out.println("Nome do arquivo: " + args[1].toString());
+				System.out.println("Hash: " + resultado_hex.toString());
 			}
-			else {
-				System.out.println("Correct usage: --hash <file>");
+			catch(Exception e) {
+				e.printStackTrace();
 			}
 		}
-		else if (args[0].equals("--verify")) {
-			if(args.length == 3) {
-				try{
-					String resultado_hex = compute_hash(args[1]);
-					if(resultado_hex.equals(args[2])) {
-						System.out.println("Integrity assured");
-					}
-					else {
-						System.out.println("File not whole");
-						System.out.println("Provided hash: " + args[2]);
-						System.out.println("Correct hash: " + resultado_hex);
-					}
-				}
-				catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-			else{
-					System.out.println("Correct usage: --verify <file> <hash>");
-			}		
-				
-		}
-		
-		else if(args[0].equals("--help")) {
-			print_help();
-		}
-		
 		else {
-			System.out.println("Command not found. Try --help");
+			System.out.println("Correct usage: --hash <file>");
 		}
 		
 	}
+	private static void verify_command(String[] args) {
+		if(args.length == 3) {
+			try{
+				String resultado_hex = compute_hash(args[1]);
+				if(resultado_hex.equals(args[2])) {
+					System.out.println("Integrity assured");
+				}
+				else {
+					System.out.println("File not whole");
+					System.out.println("Provided hash: " + args[2]);
+					System.out.println("Correct hash: " + resultado_hex);
+				}
+			}
+			catch(NoSuchAlgorithmException e) {
+				System.out.println("Algoritmo Inexistente");
+				
+			}
+			
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		else{
+				System.out.println("Correct usage: --verify <file> <hash>");
+		}	
+		
+	}
+	
+	
 
 }
